@@ -13,10 +13,10 @@ rain_path = "/mnt/HDD_1/yanshuo/Rainfall/Rainfall_ALL.pkl"
 
 agency = tools.read_nparray(agency_path)
 flooding_rec = tools.read_nparray(flooding_rec_path, allow_pickle=True)
-# with open(wl_path, 'rb') as f: water_level = pickle.load(f)
-# print("water level pkl loaded.")
-# with open(rain_path, 'rb') as f: rain_record = pickle.load(f)
-# print("rain station pkl loaded.")
+with open(wl_path, 'rb') as f: water_level = pickle.load(f)
+print("water level pkl loaded.")
+with open(rain_path, 'rb') as f: rain_record = pickle.load(f)
+print("rain station pkl loaded.")
 flooding_near_agency_keys = []
 flooding_near_agency_values = []
 
@@ -43,8 +43,7 @@ for record in flooding_near_agency_values:
 
 print("{} out of {} with flooding height.".format(len(flooding_near_agency_with_label), len(flooding_near_agency_keys)))
 
-'''debug part'''
-'''
+### wl and rain station pair ###
 def pair_time_height(start_time, end_time, recordings, flag=None):
     record_in_range = {}
     if flag == 'wl':
@@ -82,4 +81,3 @@ for keys, values in zip(flooding_near_agency_keys, flooding_near_agency_values):
     tools.plot_trend_line(times_wl, height_wl, times_rain, height_rain, keys)
 
 print("unavailable water level: {} || unavailable rain station: {} || unavailable data: {}/{}".format(unavailable_wl, unavailable_rain, total_unavailable, len(flooding_near_agency_keys)))
-'''
