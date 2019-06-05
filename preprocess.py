@@ -20,6 +20,7 @@ print("rain station pkl loaded.")
 flooding_near_agency_keys = []
 flooding_near_agency_values = []
 
+# Distance btw agency and EMIC within threshold
 for record in flooding_rec:
     for ag in agency:
         distance = tools.cal_dist(record[6], record[7], float(ag[18]), float(ag[19]))
@@ -28,9 +29,10 @@ for record in flooding_rec:
             flooding_near_agency_values.append([ag[23], ag[24], record[0], record[6], record[7], record[11]])
             count_rec = count_rec + 1
 
-print("{} flooding record left".format(count_rec))
+print("{}/{} flooding record within {} meter.".format(count_rec, len(flooding_rec), threshold))
 
-# description [11]
+# Determine if the description contains words like "cm" or "m"
+# description: array index [11]
 flooding_near_agency_with_label = []
 for record in flooding_near_agency_values:
     words = jieba.cut(str(record[-1]))
@@ -41,7 +43,7 @@ for record in flooding_near_agency_values:
     if "公尺" in words:
         flooding_near_agency_with_label.append(record)
 
-print("{} out of {} with flooding height.".format(len(flooding_near_agency_with_label), len(flooding_near_agency_keys)))
+print("{}/{} with 'cm' or 'm', but requiring human check.".format(len(flooding_near_agency_with_label), len(flooding_near_agency_keys)))
 
 ### wl and rain station pair ###
 def pair_time_height(start_time, end_time, recordings, flag=None):
@@ -67,12 +69,14 @@ unavailable_wl = 0
 unavailable_rain = 0
 total_unavailable = 0
 for keys, values in zip(flooding_near_agency_keys, flooding_near_agency_values):
+    
     # WL
     water_level_station_records = water_level[values[0]]
     end_time = values[2]
     start_time = values[2] - datetime.timedelta(hours=72)
     times_wl, height_wl = pair_time_height(start_time, end_time, water_level_station_records, flag='wl')
     if not times_wl: unavailable_wl += 1; total_unavailable += 1; continue
+    
     # Rain
     rain_station_records = rain_record[values[1]]
     times_rain, height_rain = pair_time_height(start_time, end_time, rain_station_records, flag='rain')

@@ -57,7 +57,7 @@ def plot_trend_line(times_wl, height_wl, times_rain, height_rain, agency_name):
     plt.figure(figsize=(10,5))
     plot_wl, = plt.plot(times_wl, height_wl)
     plot_rain, = plt.plot(times_rain, height_rain)
-    plt.title(agency_name, fontproperties=fontP)
+    plt.title(agency_name, fontproperties="DFKai-SB")
     plt.legend(handles = [plot_wl, plot_rain], labels = ["water level station", "rain station"], loc = 'best' )
     plt.savefig("{}/{}.png".format("/mnt/HDD_1/yanshuo/trend_line", agency_name))
     plt.clf()

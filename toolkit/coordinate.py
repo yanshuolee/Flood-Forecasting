@@ -1,4 +1,5 @@
- import math
+import math
+
 a = 6378137.0
 b = 6356752.314245
 lon0 = 121 * math.pi / 180
