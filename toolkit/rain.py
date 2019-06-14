@@ -5,12 +5,12 @@ import datetime
 import pickle
 import os
 
-rain_dict = {}
 def save_pickle(x, filename):
     with open(filename, 'wb') as f: pickle.dump(x, f)
 
 def load(save=False):
-
+    
+    rain_dict = {}
     ### processing 1998-2017.txt ###
     print("processing 1998-2017.txt")
 
@@ -55,10 +55,12 @@ def load(save=False):
         file_csv = np.array(file_csv_path)
 
         for record in file_csv:
-            if record[0] not in rain_dict: rain_dict[record[0]] = {}
-            level = 0.0 if record[4] == -998.0 else record[4]
-            if record[4] < 0 and record[4]!=-998.0: special_value_type_1 += 1; continue
-            rain_dict[record[0]][to_time_type_1(record[1])] = level
+            timestamp = to_time_type_1(record[1])
+            if timestamp.time().minute == 0:
+                if record[0] not in rain_dict: rain_dict[record[0]] = {}
+                level = 0.0 if record[4] == -998.0 else record[4]
+                if record[4] < 0 and record[4]!=-998.0: special_value_type_1 += 1; continue
+                rain_dict[record[0]][timestamp] = level
 
 
     ### type 2: processing 2018-1~2018-10.csv(metro and auto) ###
