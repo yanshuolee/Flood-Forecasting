@@ -28,6 +28,7 @@ def load(save=False):
     level 1: string
     coordinate: Polygon object
     """
+    
     directories = [d for d in os.listdir("/mnt/HDD_1/yanshuo/潛視圖/臺南市/JSON/") if d.endswith('.json')]
     maps = {}
 

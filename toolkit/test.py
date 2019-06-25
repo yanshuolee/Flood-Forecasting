@@ -1,12 +1,13 @@
 # import pickle
 # import numpy
-
+#
 # wl_path = "/mnt/HDD_1/yanshuo/Waterlevel/water_level_2016_to_2019.pkl"
 # rain_path = "/mnt/HDD_1/yanshuo/Rainfall/Rainfall_ALL.pkl"
-
-# with open(wl_path, 'rb') as f: water_level = pickle.load(f)
+#
+# # with open(wl_path, 'rb') as f: water_level = pickle.load(f)
 # with open(rain_path, 'rb') as f: rain_record = pickle.load(f)
 
+# print("")
 
 
 # import shapefile
@@ -33,7 +34,25 @@
 
 # import numpy as np
 # save_path = "/mnt/HDD_1/yanshuo/EMIC2016-2019台南市歷史水災災點/"
-# filename = "elder"
+# filename = "ALL"
 # labeled = np.load(save_path+filename+"_labeled_value.npy", allow_pickle=True)
 # unlabeled = np.load(save_path+filename+"_unlabeled_key.npy")
+
+# import numpy as np
+# import pandas as pd
+# file_csv_path = pd.read_csv("/mnt/HDD_1/yanshuo/Rainfall/{}".format("rain_201904.csv"))
+# file_csv = np.array(file_csv_path)
+#
+# for i in file_csv:
+#     if i[0] == "C10850":
+#         print(i[1])
+#         print(i[3])
+
+import numpy as np
+n_class = [0,0,0,0,0,0]
+label = np.load("/mnt/HDD_1/yanshuo/Task_2/label.npy")
+
+print("")
+
+
 

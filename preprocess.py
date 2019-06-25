@@ -3,6 +3,7 @@ import jieba
 import pickle
 import datetime
 from toolkit import tools
+from shapely.geometry import Point
 
 threshold = 300  # unit: meter
 agency_path = "/mnt/HDD_1/yanshuo/Elderly_Welfare_Agency_2017/Tainan_agency_with_wl_rain_station.npy"
@@ -22,7 +23,9 @@ def flooding_EMIC():
 
     for record in flooding_rec:
         keys.append(record[1])
-        values.append([record[0], record[6], record[7], record[11]])
+        # EMIC disaster name
+        values.append([None, None, record[0], record[6], record[7], record[11]])
+        # [none, none, EMIC.time, EMIC.X, EMIC.Y, description]
     
     return keys, values
 
@@ -37,54 +40,14 @@ def flooding_near_agency():
             distance = tools.cal_dist(record[6], record[7], float(ag[18]), float(ag[19]))
             if distance <= threshold:
                 flooding_near_agency_keys.append(str(ag[2]))
+                # [agency name]
                 flooding_near_agency_values.append([ag[23], ag[24], record[0], record[6], record[7], record[11]])
+                # [wl_near_ag, rain_near_ag, EMIC.time, EMIC.X, EMIC.Y, description]
                 count_rec = count_rec + 1
 
     print("{}/{} EMIC record within {} meter.".format(count_rec, len(flooding_rec), threshold))
 
     return flooding_near_agency_keys, flooding_near_agency_values
-
-def labelling(keys, values, filename):
-    # Determine if the description contains words like "cm" or "m"
-    # description: array index [11]
-
-    labeled_keys = []
-    labeled_values = []
-    unlabeled_keys = []
-    unlabeled_values = []
-
-    for key, record in zip(keys, values):
-        words = jieba.cut(str(record[-1]))
-        words = list(words)
-        
-        if "公分" in words:
-            labeled_keys.append(key)
-            labeled_values.append(record)
-        elif "公尺" in words:
-            labeled_keys.append(key)
-            labeled_values.append(record)
-        else:
-            unlabeled_keys.append(key)
-            unlabeled_values.append(record)
-    
-    print("=== Human checking ===")
-    _labeled_keys, _labeled_values,_unlabeled_keys, _unlabeled_values = tools.human_labeling(labeled_keys, labeled_values, unlabeled_keys, unlabeled_values)
-    print("labeled: {}, unlabeled: {}, {} in total.".format(len(_labeled_values), len(_unlabeled_values), len(keys)))
-
-    while True:
-        inputs = input("Save? Yes(1)/No(0): ")
-        inputs = int(inputs)
-        if inputs == 0 or inputs == 1: break
-    
-    if inputs == 1:
-        save_path = "/mnt/HDD_1/yanshuo/EMIC2016-2019台南市歷史水災災點/"
-        np.save(save_path+filename+"_labeled_key.npy", _labeled_keys)
-        np.save(save_path+filename+"_labeled_value.npy", _labeled_values)
-        np.save(save_path+filename+"_unlabeled_key.npy", _unlabeled_keys)
-        np.save(save_path+filename+"_unlabeled_value.npy", _unlabeled_values)
-        print("Saved!")
-
-
 
 ### wl and rain station pair ###
 def trend_line(flooding_near_agency_keys, flooding_near_agency_values, save=True):
@@ -136,9 +99,9 @@ def trend_line(flooding_near_agency_keys, flooding_near_agency_values, save=True
 
 
 if __name__ == "__main__":
-    flooding_near_agency_keys, flooding_near_agency_values = flooding_near_agency()
-    # labelling(flooding_near_agency_keys, flooding_near_agency_values, "elder")
-    trend_line(flooding_near_agency_keys, flooding_near_agency_values)
+    # flooding_near_agency_keys, flooding_near_agency_values = flooding_near_agency()
+    # tools.labelling(flooding_near_agency_keys, flooding_near_agency_values, "elder")
+    # trend_line(flooding_near_agency_keys, flooding_near_agency_values)
 
-    # flooding_ALL_keys, flooding_ALL_values = flooding_EMIC()
-    # labelling(flooding_ALL_keys, flooding_ALL_values, "ALL")
+    flooding_ALL_keys, flooding_ALL_values = flooding_EMIC()
+    tools.labelling(flooding_ALL_keys, flooding_ALL_values, "ALL")
