@@ -6,8 +6,8 @@
 ##---------------------------------------------------------
 
 import numpy as np
-from . import grd_preprocess as gp
-from . import nearest_station as ns
+import grd_preprocess as gp
+import nearest_station as ns
 
 WL_STATION_COORDINATE = "/home/csist/YSL/Flood/Data/WL_station_coordinate.npy"
 

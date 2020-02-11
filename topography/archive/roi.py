@@ -8,7 +8,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
-from . import station_grd_merge as sgm
+import station_grd_merge as sgm
 
 MAX_HEIGHT = 0.0
 MIN_HEIGHT = 99999.99

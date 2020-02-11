@@ -102,7 +102,7 @@ def plot_trend_line(times_wl, height_wl, times_rain, height_rain, agency_name, i
     plt.clf()
     plt.close()
     print("{}_{} plotted.".format(index, agency_name))
-'''
+
 def human_labeling(keys, values, unlabeled_keys, unlabeled_values):
     print("=== Starting labeling. Type 0 if it is unlabeled, else 1. ===")
     
@@ -132,7 +132,7 @@ def human_labeling(keys, values, unlabeled_keys, unlabeled_values):
     unlabeled_values = np.array(unlabeled_values)
 
     return keys, values, unlabeled_keys, unlabeled_values
-'''
+
 def labelling(keys, values, filename):
     # Determine if the description contains words like "cm" or "m"
     # description: array index [11]
